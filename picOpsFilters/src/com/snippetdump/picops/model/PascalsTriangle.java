@@ -126,8 +126,7 @@ public class PascalsTriangle extends Model {
 		 * gesamten Bildpunkten des neuen Bildes durch das Bildpunktverhältnis
 		 * des alten Bildes
 		 **/
-		float dblNewMaskSize = (float) Math
-				.sqrt(((currImgWidth * currImgHeight) / ratioImageToMask));
+		float dblNewMaskSize = (float) Math.sqrt(((currImgWidth * currImgHeight) / ratioImageToMask));
 		/** Runden auf Integer-Wert **/
 		int newMaskSize = Math.round(dblNewMaskSize);
 		if (newMaskSize % 2 == 0) {
