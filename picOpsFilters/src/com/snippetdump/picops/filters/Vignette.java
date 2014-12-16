@@ -12,7 +12,7 @@ import android.graphics.Shader;
 /**
  * The Class Vignette.
  */
-public class Vignette extends Filter {
+public class Vignette implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -34,14 +34,15 @@ public class Vignette extends Filter {
 	 *            the m vignette
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(Vignette mVignette) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mVignette.getBitmapIn().getWidth();
-		int height = mVignette.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		Bitmap bitmapOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmapOut);
-		canvas.drawBitmap(mVignette.getBitmapIn(), 0, 0, null);
+		canvas.drawBitmap(this.getBitmapIn(), 0, 0, null);
 
 		int tenthLeftRight = (int) (width / 5);
 		int tenthTopBottom = (int) (height / 5);
@@ -87,6 +88,7 @@ public class Vignette extends Filter {
 		rectf = new RectF(rect);
 		canvas.drawRect(rectf, paint);
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

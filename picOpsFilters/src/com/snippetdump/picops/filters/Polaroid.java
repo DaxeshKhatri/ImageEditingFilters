@@ -10,8 +10,8 @@ import android.graphics.RectF;
 /**
  * The Class Polaroid.
  */
-public class Polaroid extends Filter {
-	
+public class Polaroid implements Filter {
+
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
 
@@ -38,11 +38,12 @@ public class Polaroid extends Filter {
 	 *            the m polaroid
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(Polaroid mPolaroid) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mPolaroid.getBitmapIn().getWidth();
-		int height = mPolaroid.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int _width, _height;
 		_width = _height = 0;
 
@@ -71,17 +72,16 @@ public class Polaroid extends Filter {
 		Paint paint = new Paint();
 		paint.setColor(Color.argb(0xFF, 0xF1, 0xF1, 0xF1));
 
-		Bitmap bitmapOut = Bitmap.createBitmap(_width, _height, mPolaroid
+		Bitmap bitmapOut = Bitmap.createBitmap(_width, _height, this
 				.getBitmapIn().getConfig());
 
-		VintageEffect mVintageEffect = new VintageEffect(
-				mPolaroid.getBitmapIn());
+		VintageEffect mVintageEffect = new VintageEffect(this.getBitmapIn());
 
 		Canvas canvas = new Canvas(bitmapOut);
 		// Draw border
 		canvas.drawColor(Color.argb(0xFF, 0xE1, 0xE1, 0xE1));
 		canvas.drawRect(rectf, paint);
-		canvas.drawBitmap(mVintageEffect.executeFilter(mVintageEffect),
+		canvas.drawBitmap(mVintageEffect.executeFilter(),
 				(float) (width * side), (float) (width * side), null);
 		time = System.currentTimeMillis() - time;
 

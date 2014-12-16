@@ -6,8 +6,8 @@ import android.graphics.Matrix;
 /**
  * The Class MirrorImage.
  */
-public class MirrorImage extends Filter {
-	
+public class MirrorImage implements Filter {
+
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
 
@@ -40,7 +40,8 @@ public class MirrorImage extends Filter {
 	 *            the m mirror image
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(MirrorImage mMirrorImage) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
 		Matrix matrix = new Matrix();
@@ -50,10 +51,10 @@ public class MirrorImage extends Filter {
 		if (type == FLIP_HORIZONTAL)
 			matrix.preScale(-1.0f, 1.0f);
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
-		return Bitmap.createBitmap(mMirrorImage.getBitmapIn(), 0, 0,
-				mMirrorImage.getBitmapIn().getWidth(), mMirrorImage
-						.getBitmapIn().getHeight(), matrix, true);
+		return Bitmap.createBitmap(this.getBitmapIn(), 0, 0, this.getBitmapIn()
+				.getWidth(), this.getBitmapIn().getHeight(), matrix, true);
 	}
 
 	/**

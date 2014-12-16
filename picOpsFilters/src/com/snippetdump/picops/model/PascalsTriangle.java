@@ -3,7 +3,7 @@ package com.snippetdump.picops.model;
 /**
  * Is needed in order to create Gaussian convolution masks.
  */
-public class PascalsTriangle extends Model {
+public class PascalsTriangle implements Model {
 
 	/** The pasc dreieck. */
 	private static final int[][] pascDreieck = { { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -111,7 +111,7 @@ public class PascalsTriangle extends Model {
 	 *            the curr img height
 	 * @return the double[][]
 	 */
-	public static double[][] generateFaltungsmaske(int sizeMask, int prevImgWidth,
+	public static double[][] generateConvolutionMask(int sizeMask, int prevImgWidth,
 			int prevImgHeight, int currImgWidth, int currImgHeight) {
 		/**
 		 * Anhand der Bildpunkte des skalierten Bildes und der Bildpunkte der

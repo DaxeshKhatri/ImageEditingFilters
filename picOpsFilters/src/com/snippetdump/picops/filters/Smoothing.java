@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 /**
  * The Class Smoothing.
  */
-public class Smoothing extends Filter {
+public class Smoothing implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -39,14 +39,15 @@ public class Smoothing extends Filter {
 	 *            the m smoothing
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(Smoothing mSmoothing) {
+	@Override
+	public Bitmap executeFilter() {
 
-		mSmoothing.getConvolutionMask().setAll(1);
-		mSmoothing.getConvolutionMask().Factor = mSmoothing.getConvolutionMask().Maske.length;
-		mSmoothing.getConvolutionMask().Offset = 0;
+		this.getConvolutionMask().setAll(1);
+		this.getConvolutionMask().Factor = this.getConvolutionMask().Maske.length;
+		this.getConvolutionMask().Offset = 0;
 
-		return ConvolutionMask.berechneFaltungMxM(mSmoothing.getBitmapIn(),
-				mSmoothing.getConvolutionMask());
+		return ConvolutionMask.calculateConvolutionMxM(this.getBitmapIn(),
+				this.getConvolutionMask());
 	}
 
 	/**

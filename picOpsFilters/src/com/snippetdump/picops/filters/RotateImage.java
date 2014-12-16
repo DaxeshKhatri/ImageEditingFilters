@@ -6,7 +6,7 @@ import android.graphics.Matrix;
 /**
  * The Class RotateImage.
  */
-public class RotateImage extends Filter {
+public class RotateImage implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -34,15 +34,17 @@ public class RotateImage extends Filter {
 	 *            the m rotate image
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(RotateImage mRotateImage) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
 		Matrix matrix = new Matrix();
-		matrix.postRotate(mRotateImage.getDegree());
+		matrix.postRotate(this.getDegree());
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
-		return Bitmap.createBitmap(mRotateImage.getBitmapIn(), 0, 0, mRotateImage.getBitmapIn()
-				.getWidth(), mRotateImage.getBitmapIn().getHeight(), matrix, true);
+		return Bitmap.createBitmap(this.getBitmapIn(), 0, 0, this.getBitmapIn()
+				.getWidth(), this.getBitmapIn().getHeight(), matrix, true);
 	}
 
 	/**

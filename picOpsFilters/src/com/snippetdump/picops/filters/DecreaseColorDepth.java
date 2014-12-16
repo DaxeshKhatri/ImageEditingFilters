@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class DecreaseColorDepth.
  */
-public class DecreaseColorDepth extends Filter {
+public class DecreaseColorDepth implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -34,21 +34,22 @@ public class DecreaseColorDepth extends Filter {
 	 *            the m decrease color depth
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(DecreaseColorDepth mDecreaseColorDepth) {
+	@Override
+	public Bitmap executeFilter() {
 
-		if (mDecreaseColorDepth.getBitOffset() == 0) {
-			mDecreaseColorDepth.setBitOffset(32);
-		} else if (mDecreaseColorDepth.getBitOffset() == 1) {
-			mDecreaseColorDepth.setBitOffset(64);
-		} else if (mDecreaseColorDepth.getBitOffset() == 2) {
-			mDecreaseColorDepth.setBitOffset(128);
+		if (this.getBitOffset() == 0) {
+			this.setBitOffset(32);
+		} else if (this.getBitOffset() == 1) {
+			this.setBitOffset(64);
+		} else if (this.getBitOffset() == 2) {
+			this.setBitOffset(128);
 		}
 		long time = System.currentTimeMillis();
-		int width = mDecreaseColorDepth.getBitmapIn().getWidth();
-		int height = mDecreaseColorDepth.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int[] pixels = new int[width * height];
 		int red, green, blue;
-		mDecreaseColorDepth.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
@@ -56,31 +57,32 @@ public class DecreaseColorDepth extends Filter {
 			green = Color.green(pixels[i]);
 			blue = Color.blue(pixels[i]);
 
-			red = ((red + (mDecreaseColorDepth.getBitOffset() / 2))
-					- ((red + (mDecreaseColorDepth.getBitOffset() / 2)) % mDecreaseColorDepth
+			red = ((red + (this.getBitOffset() / 2))
+					- ((red + (this.getBitOffset() / 2)) % this
 							.getBitOffset()) - 1);
 			if (red < 0)
 				red = 0;
 
-			green = ((green + (mDecreaseColorDepth.getBitOffset() / 2))
-					- ((green + (mDecreaseColorDepth.getBitOffset() / 2)) % mDecreaseColorDepth
+			green = ((green + (this.getBitOffset() / 2))
+					- ((green + (this.getBitOffset() / 2)) % this
 							.getBitOffset()) - 1);
 			if (green < 0)
 				green = 0;
 
-			blue = ((blue + (mDecreaseColorDepth.getBitOffset() / 2))
-					- ((blue + (mDecreaseColorDepth.getBitOffset() / 2)) % mDecreaseColorDepth
+			blue = ((blue + (this.getBitOffset() / 2))
+					- ((blue + (this.getBitOffset() / 2)) % this
 							.getBitOffset()) - 1);
 			if (blue < 0)
 				blue = 0;
 
 			pixels[i] = Color.argb(Color.alpha(pixels[i]), red, green, blue);
 		}
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mDecreaseColorDepth.getBitmapIn()
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
 				.getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

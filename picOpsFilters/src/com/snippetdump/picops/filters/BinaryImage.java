@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class BinaryImage.
  */
-public class BinaryImage extends Filter {
+public class BinaryImage implements Filter {
 
 	private static final Double VALUE_RED = 0.3;
 	private static final Double VALUE_GREEN = 0.59;
@@ -38,14 +38,15 @@ public class BinaryImage extends Filter {
 	 *            the m binary image
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(BinaryImage mBinaryImage) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		DoGreyscale mDoGreyscale = new DoGreyscale(mBinaryImage.getBitmapIn());
-		Bitmap bitmapOut = mDoGreyscale.executeFilter(mDoGreyscale);
+		DoGreyscale mDoGreyscale = new DoGreyscale(this.getBitmapIn());
+		Bitmap bitmapOut = mDoGreyscale.executeFilter();
 
-		int width = mBinaryImage.getBitmapIn().getWidth();
-		int height = mBinaryImage.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int pixel, red, green, blue;
 		double grey;
 		int[] pixelsGreyscaled = new int[width * height];
@@ -59,13 +60,14 @@ public class BinaryImage extends Filter {
 			green = Color.green(pixel);
 			blue = Color.blue(pixel);
 			grey = ((red * VALUE_RED) + (green * VALUE_GREEN) + (blue * VALUE_BLUE));
-			red = green = blue = thresholdOperation(mBinaryImage.getThreshold(), grey);
+			red = green = blue = thresholdOperation(this.getThreshold(), grey);
 			pixelsGreyscaled[i] = Color.argb(Color.alpha(pixel), red, green, blue);
 		}
-		bitmapOut = Bitmap.createBitmap(width, height, mBinaryImage.getBitmapIn().getConfig());
+		bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn().getConfig());
 		bitmapOut.setPixels(pixelsGreyscaled, 0, width, 0, 0, width, height);
 		time = System.currentTimeMillis() - time;
-
+		System.out.println("Finished @ " + time + "ms");
+		
 		return bitmapOut;
 	}
 

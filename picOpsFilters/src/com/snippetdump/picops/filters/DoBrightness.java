@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class DoBrightness.
  */
-public class DoBrightness extends Filter {
+public class DoBrightness implements Filter {
 
 	private static final Integer MAX = 255;
 
@@ -36,15 +36,16 @@ public class DoBrightness extends Filter {
 	 *            the m do brightness
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(DoBrightness mDoBrightness) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mDoBrightness.getBitmapIn().getWidth();
-		int height = mDoBrightness.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		Bitmap bitmapOut = null;
 		int red, green, blue, pixel;
 		int[] pixels = new int[width * height];
-		mDoBrightness.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 			pixel = pixels[i];
@@ -52,19 +53,19 @@ public class DoBrightness extends Filter {
 			green = Color.green(pixel);
 			blue = Color.blue(pixel);
 
-			red += mDoBrightness.getValue();
+			red += this.getValue();
 			if (red > MAX)
 				red = MAX;
 			else if (red < 0)
 				red = 0;
 
-			green += mDoBrightness.getValue();
+			green += this.getValue();
 			if (green > MAX)
 				green = MAX;
 			else if (green < 0)
 				green = 0;
 
-			blue += mDoBrightness.getValue();
+			blue += this.getValue();
 			if (blue > MAX)
 				blue = MAX;
 			else if (blue < 0)
@@ -72,10 +73,11 @@ public class DoBrightness extends Filter {
 
 			pixels[i] = Color.argb(Color.alpha(pixel), red, green, blue);
 		}
-		bitmapOut = Bitmap.createBitmap(width, height, mDoBrightness.getBitmapIn().getConfig());
+		bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn().getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

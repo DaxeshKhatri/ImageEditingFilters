@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 /**
  * The Class SharpeningConvolution.
  */
-public class SharpeningConvolution extends Filter {
+public class SharpeningConvolution implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -23,7 +23,8 @@ public class SharpeningConvolution extends Filter {
 	 */
 	public SharpeningConvolution(Bitmap bitmapIn) {
 		this.bitmapIn = bitmapIn;
-		double[][] sharpeningConfig = new double[][] { { 0, -1, 0 }, { -1, 5, -1 }, { 0, -1, 0 }, };
+		double[][] sharpeningConfig = new double[][] { { 0, -1, 0 },
+				{ -1, 5, -1 }, { 0, -1, 0 }, };
 		this.convolutionMask = new ConvolutionMask(3);
 		this.convolutionMask.applyFaltungskonfiguration(sharpeningConfig);
 		this.convolutionMask.Factor = 1;
@@ -37,10 +38,11 @@ public class SharpeningConvolution extends Filter {
 	 *            the m sharpening convolution
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(SharpeningConvolution mSharpeningConvolution) {
+	@Override
+	public Bitmap executeFilter() {
 
-		return ConvolutionMask.berechneFaltung3x3(mSharpeningConvolution.getBitmapIn(),
-				mSharpeningConvolution.getConvolutionMask());
+		return ConvolutionMask.calculateConvolution3x3(this.getBitmapIn(),
+				this.getConvolutionMask());
 	}
 
 	/**

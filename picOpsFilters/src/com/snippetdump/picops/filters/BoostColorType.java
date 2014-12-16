@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class BoostColorType.
  */
-public class BoostColorType extends Filter {
+public class BoostColorType implements Filter {
 
 	private static final int MAX = 255;
 
@@ -51,14 +51,15 @@ public class BoostColorType extends Filter {
 	 *            the m boost color type
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(BoostColorType mBoostColorType) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mBoostColorType.getBitmapIn().getWidth();
-		int height = mBoostColorType.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int alpha, red, green, blue;
 		int[] pixels = new int[width * height];
-		mBoostColorType.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
@@ -67,30 +68,31 @@ public class BoostColorType extends Filter {
 			green = Color.green(pixels[i]);
 			blue = Color.blue(pixels[i]);
 
-			if (mBoostColorType.getType() == RED) {
-				red = (int) (red * (1 + mBoostColorType.getPercent()));
+			if (this.getType() == RED) {
+				red = (int) (red * (1 + this.getPercent()));
 				if (red > MAX)
 					red = MAX;
 			}
 
-			if (mBoostColorType.getType() == GREEN) {
-				green = (int) (green * (1 + mBoostColorType.getPercent()));
+			if (this.getType() == GREEN) {
+				green = (int) (green * (1 + this.getPercent()));
 				if (green > MAX)
 					green = MAX;
 			}
 
-			if (mBoostColorType.getType() == BLUE) {
-				blue = (int) (blue * (1 + mBoostColorType.getPercent()));
+			if (this.getType() == BLUE) {
+				blue = (int) (blue * (1 + this.getPercent()));
 				if (blue > MAX)
 					blue = MAX;
 			}
 			pixels[i] = Color.argb(alpha, red, green, blue);
 		}
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mBoostColorType.getBitmapIn()
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
 				.getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

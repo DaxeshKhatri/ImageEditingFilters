@@ -7,7 +7,7 @@ import android.graphics.Color;
 /**
  * The Class BoxBlur.
  */
-public class BoxBlur extends Filter {
+public class BoxBlur implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -35,22 +35,25 @@ public class BoxBlur extends Filter {
 	 *            the m box blur
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(BoxBlur mBoxBlur) {
+	@SuppressWarnings("deprecation")
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mBoxBlur.getBitmapIn().getWidth();
-		int height = mBoxBlur.getBitmapIn().getHeight();
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mBoxBlur.getBitmapIn().getConfig());
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn().getConfig());
 		Canvas canvas = new Canvas(bitmapOut);
 		int[] pixels = new int[width * height];
-		mBoxBlur.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		boxBlurHorizontal(pixels, width, height, range / 2);
 		boxBlurVertical(pixels, width, height, range / 2);
 
 		canvas.drawBitmap(pixels, 0, width, 0.0f, 0.0f, width, height, true, null);
 		time = System.currentTimeMillis() - time;
-
+		System.out.println("Finished @ " + time + "ms");
+		
 		return bitmapOut;
 	}
 
