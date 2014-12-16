@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class CreateContrast.
  */
-public class CreateContrast extends Filter {
+public class CreateContrast implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -34,15 +34,16 @@ public class CreateContrast extends Filter {
 	 *            the m create contrast
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(CreateContrast mCreateContrast) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mCreateContrast.getBitmapIn().getWidth();
-		int height = mCreateContrast.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int alpha, red, green, blue;
-		double contrast = Math.pow((100 + mCreateContrast.getValue()) / 100, 2);
+		double contrast = Math.pow((100 + this.getValue()) / 100, 2);
 		int[] pixels = new int[width * height];
-		mCreateContrast.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
@@ -71,11 +72,12 @@ public class CreateContrast extends Filter {
 
 			pixels[i] = Color.argb(alpha, red, green, blue);
 		}
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mCreateContrast.getBitmapIn()
-				.getConfig());
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this
+				.getBitmapIn().getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

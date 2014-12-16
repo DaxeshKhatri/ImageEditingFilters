@@ -12,7 +12,7 @@ import android.graphics.RectF;
 /**
  * The Class RoundCorners.
  */
-public class RoundCorners extends Filter {
+public class RoundCorners implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -40,12 +40,13 @@ public class RoundCorners extends Filter {
 	 *            the m round corners
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(RoundCorners mRoundCorners) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mRoundCorners.getBitmapIn().getWidth();
-		int height = mRoundCorners.getBitmapIn().getHeight();
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mRoundCorners.getBitmapIn()
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
 				.getConfig());
 
 		Canvas canvas = new Canvas(bitmapOut);
@@ -59,8 +60,9 @@ public class RoundCorners extends Filter {
 
 		canvas.drawRoundRect(rectanglef, round, round, paint);
 		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-		canvas.drawBitmap(mRoundCorners.getBitmapIn(), rectangle, rectangle, paint);
+		canvas.drawBitmap(this.getBitmapIn(), rectangle, rectangle, paint);
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

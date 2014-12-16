@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 /**
  * The Class SmoothingForExport.
  */
-public class SmoothingForExport extends Filter {
+public class SmoothingForExport implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -34,16 +34,16 @@ public class SmoothingForExport extends Filter {
 	 * @param curHeight
 	 *            the cur height
 	 */
-	public SmoothingForExport(Bitmap bitmapIn, int oldSizeOfMask, int prevWidth, int prevHeight,
-			int curWidth, int curHeight) {
+	public SmoothingForExport(Bitmap bitmapIn, int oldSizeOfMask,
+			int prevWidth, int prevHeight, int curWidth, int curHeight) {
 		this.bitmapIn = bitmapIn;
 		this.oldSizeOfMask = oldSizeOfMask;
 		this.prevWidth = prevWidth;
 		this.prevHeight = prevHeight;
 		this.curWidth = curWidth;
 		this.curHeight = curHeight;
-		this.convolutionMask = new ConvolutionMask(adjustSizeForMask(oldSizeOfMask, prevWidth,
-				prevHeight, curWidth, curHeight));
+		this.convolutionMask = new ConvolutionMask(adjustSizeForMask(
+				oldSizeOfMask, prevWidth, prevHeight, curWidth, curHeight));
 	}
 
 	/**
@@ -53,14 +53,15 @@ public class SmoothingForExport extends Filter {
 	 *            the m smoothing for export
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(SmoothingForExport mSmoothingForExport) {
+	@Override
+	public Bitmap executeFilter() {
 
-		mSmoothingForExport.getConvolutionMask().setAll(1);
-		mSmoothingForExport.getConvolutionMask().Factor = convolutionMask.Maske.length;
-		mSmoothingForExport.getConvolutionMask().Offset = 0;
+		this.getConvolutionMask().setAll(1);
+		this.getConvolutionMask().Factor = convolutionMask.Maske.length;
+		this.getConvolutionMask().Offset = 0;
 
-		return ConvolutionMask.berechneFaltungMxM(mSmoothingForExport.getBitmapIn(),
-				mSmoothingForExport.getConvolutionMask());
+		return ConvolutionMask.calculateConvolutionMxM(this.getBitmapIn(),
+				this.getConvolutionMask());
 	}
 
 	/**
@@ -97,15 +98,16 @@ public class SmoothingForExport extends Filter {
 	 *            the cur height
 	 * @return the int
 	 */
-	private int adjustSizeForMask(int oldSizeOfMask, int prevWidth, int prevHeight, int curWidth,
-			int curHeight) {
+	private int adjustSizeForMask(int oldSizeOfMask, int prevWidth,
+			int prevHeight, int curWidth, int curHeight) {
 
 		int newSizeMask = 0;
 		int prevPixels = prevWidth * prevHeight;
 		int oldMaskPixels = oldSizeOfMask * oldSizeOfMask;
 
 		double oldRatio = prevPixels / oldMaskPixels;
-		float fltNewSizeMask = (float) Math.sqrt(((curWidth * curHeight) / oldRatio));
+		float fltNewSizeMask = (float) Math
+				.sqrt(((curWidth * curHeight) / oldRatio));
 		newSizeMask = Math.round(fltNewSizeMask);
 
 		return newSizeMask;

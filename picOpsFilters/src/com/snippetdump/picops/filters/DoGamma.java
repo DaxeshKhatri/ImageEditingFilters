@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class DoGamma.
  */
-public class DoGamma extends Filter {
+public class DoGamma implements Filter {
 
 	private static final int MAX_SIZE = 256;
 	private static final double MAX_VALUE_DBL = 255.0;
@@ -51,11 +51,12 @@ public class DoGamma extends Filter {
 	 *            the m do gamma
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(DoGamma mDoGamma) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mDoGamma.getBitmapIn().getWidth();
-		int height = mDoGamma.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int alpha, red, green, blue;
 
 		int[] gammaRed = new int[MAX_SIZE];
@@ -63,20 +64,22 @@ public class DoGamma extends Filter {
 		int[] gammaBlue = new int[MAX_SIZE];
 
 		for (int i = 0; i < MAX_SIZE; i++) {
-			gammaRed[i] = (int) Math.min(MAX_VALUE_INT, (int) ((MAX_VALUE_DBL * Math.pow(i
-					/ MAX_VALUE_DBL, REVERSE / mDoGamma.getRed())) + 0.5));
+			gammaRed[i] = (int) Math.min(
+					MAX_VALUE_INT,
+					(int) ((MAX_VALUE_DBL * Math.pow(i / MAX_VALUE_DBL, REVERSE
+							/ this.getRed())) + 0.5));
 			gammaGreen[i] = (int) Math.min(
 					MAX_VALUE_INT,
-					(int) ((MAX_VALUE_DBL * Math.pow(i / MAX_VALUE_DBL,
-							REVERSE / mDoGamma.getGreen())) + 0.5));
+					(int) ((MAX_VALUE_DBL * Math.pow(i / MAX_VALUE_DBL, REVERSE
+							/ this.getGreen())) + 0.5));
 			gammaBlue[i] = (int) Math.min(
 					MAX_VALUE_INT,
-					(int) ((MAX_VALUE_DBL * Math.pow(i / MAX_VALUE_DBL,
-							REVERSE / mDoGamma.getBlue())) + 0.5));
+					(int) ((MAX_VALUE_DBL * Math.pow(i / MAX_VALUE_DBL, REVERSE
+							/ this.getBlue())) + 0.5));
 		}
 
 		int[] pixels = new int[width * height];
-		mDoGamma.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
@@ -87,10 +90,12 @@ public class DoGamma extends Filter {
 
 			pixels[i] = Color.argb(alpha, red, green, blue);
 		}
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mDoGamma.getBitmapIn().getConfig());
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this
+				.getBitmapIn().getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

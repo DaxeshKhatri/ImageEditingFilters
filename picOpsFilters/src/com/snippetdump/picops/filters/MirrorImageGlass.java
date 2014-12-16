@@ -13,7 +13,7 @@ import android.graphics.Shader.TileMode;
 /**
  * The Class MirrorImageGlass.
  */
-public class MirrorImageGlass extends Filter {
+public class MirrorImageGlass implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -38,21 +38,23 @@ public class MirrorImageGlass extends Filter {
 	 *            the m mirror image glass
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(MirrorImageGlass mMirrorImageGlass) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mMirrorImageGlass.getBitmapIn().getWidth();
-		int height = mMirrorImageGlass.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 
 		Matrix matrix = new Matrix();
 		matrix.preScale(1.0f, -1.0f);
 
-		Bitmap mirroredImage = Bitmap.createBitmap(mMirrorImageGlass.bitmapIn, 0, height / 2,
-				width, height / 2, matrix, false);
-		Bitmap fullImage = Bitmap.createBitmap(width, (height + height / 2), Config.ARGB_8888);
+		Bitmap mirroredImage = Bitmap.createBitmap(this.bitmapIn, 0,
+				height / 2, width, height / 2, matrix, false);
+		Bitmap fullImage = Bitmap.createBitmap(width, (height + height / 2),
+				Config.ARGB_8888);
 
 		Canvas canvas = new Canvas(fullImage);
-		canvas.drawBitmap(mMirrorImageGlass.getBitmapIn(), 0, 0, null);
+		canvas.drawBitmap(this.getBitmapIn(), 0, 0, null);
 
 		Paint paint = new Paint();
 		canvas.drawRect(0, height, width, height + GAP, paint);
@@ -60,14 +62,16 @@ public class MirrorImageGlass extends Filter {
 		canvas.drawBitmap(mirroredImage, 0, height + GAP, null);
 
 		Paint paint2 = new Paint();
-		LinearGradient lgrad = new LinearGradient(0, mMirrorImageGlass.getBitmapIn().getHeight(),
-				0, fullImage.getHeight() + GAP, 0x70ffffff, 0x00ffffff, TileMode.CLAMP);
+		LinearGradient lgrad = new LinearGradient(0, this.getBitmapIn()
+				.getHeight(), 0, fullImage.getHeight() + GAP, 0x70ffffff,
+				0x00ffffff, TileMode.CLAMP);
 		paint2.setShader(lgrad);
 		paint2.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
 		canvas.drawRect(0, height, width, fullImage.getHeight() + GAP, paint2);
 		mirroredImage.recycle();
 		mirroredImage = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return fullImage;
 	}

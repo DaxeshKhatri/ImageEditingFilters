@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 /**
  * The Class GaussianBlurStrong.
  */
-public class GaussianBlurStrong extends Filter {
+public class GaussianBlurStrong implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -23,8 +23,9 @@ public class GaussianBlurStrong extends Filter {
 	 */
 	public GaussianBlurStrong(Bitmap bitmapIn) {
 		this.bitmapIn = bitmapIn;
-		double[][] convolutionMask = new double[][] { { 1, 4, 6, 4, 1 }, { 4, 16, 24, 16, 4 },
-				{ 6, 24, 36, 24, 16, 6 }, { 4, 16, 24, 16, 4 }, { 1, 4, 6, 4, 1 }, };
+		double[][] convolutionMask = new double[][] { { 1, 4, 6, 4, 1 },
+				{ 4, 16, 24, 16, 4 }, { 6, 24, 36, 24, 16, 6 },
+				{ 4, 16, 24, 16, 4 }, { 1, 4, 6, 4, 1 }, };
 		this.convolutionMask = new ConvolutionMask(5);
 		this.convolutionMask.applyFaltungskonfigurationBig(convolutionMask);
 		this.convolutionMask.Factor = 256;
@@ -38,10 +39,11 @@ public class GaussianBlurStrong extends Filter {
 	 *            the m gaussian blur strong
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(GaussianBlurStrong mGaussianBlurStrong) {
+	@Override
+	public Bitmap executeFilter() {
 
-		return ConvolutionMask.berechneFaltung5x5(mGaussianBlurStrong.getBitmapIn(),
-				mGaussianBlurStrong.getConvolutionMask());
+		return ConvolutionMask.calculateConvolution5x5(this.getBitmapIn(),
+				this.getConvolutionMask());
 	}
 
 	/**

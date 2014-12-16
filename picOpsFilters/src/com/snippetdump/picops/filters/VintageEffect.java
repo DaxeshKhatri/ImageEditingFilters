@@ -8,7 +8,7 @@ import android.graphics.Color;
 /**
  * The Class VintageEffect.
  */
-public class VintageEffect extends Filter {
+public class VintageEffect implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -31,18 +31,20 @@ public class VintageEffect extends Filter {
 	 *            the m vintage effect
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(VintageEffect mVintageEffect) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mVintageEffect.getBitmapIn().getWidth();
-		int height = mVintageEffect.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int[] pixels = new int[width * height];
-		mVintageEffect.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 		Vector<float[]> pixelsHSV = new Vector<float[]>();
 
 		for (int pixel : pixels) {
 			float[] hsv = { 0.0f, 0.0f, 0.0f };
-			Color.RGBToHSV(Color.red(pixel), Color.green(pixel), Color.blue(pixel), hsv);
+			Color.RGBToHSV(Color.red(pixel), Color.green(pixel),
+					Color.blue(pixel), hsv);
 			pixelsHSV.add(hsv);
 		}
 
@@ -74,12 +76,13 @@ public class VintageEffect extends Filter {
 		blendArrays(pixels, fullColor, 0.9);
 		fullColor = null;
 
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mVintageEffect.getBitmapIn()
-				.getConfig());
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this
+				.getBitmapIn().getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 
 		bitmapOut = vignette(bitmapOut);
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}
@@ -95,7 +98,7 @@ public class VintageEffect extends Filter {
 
 		Vignette mVignette = new Vignette(bitmapIn);
 
-		return mVignette.executeFilter(mVignette);
+		return mVignette.executeFilter();
 	}
 
 	/**
@@ -190,7 +193,8 @@ public class VintageEffect extends Filter {
 		Vector<float[]> pixelsHueHsv = new Vector<float[]>();
 		for (int pixel : pixels) {
 			float[] hsv = { 0.0f, 0.0f, 0.0f };
-			Color.RGBToHSV(Color.red(pixel), Color.green(pixel), Color.blue(pixel), hsv);
+			Color.RGBToHSV(Color.red(pixel), Color.green(pixel),
+					Color.blue(pixel), hsv);
 			pixelsHueHsv.add(hsv);
 		}
 

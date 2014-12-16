@@ -35,7 +35,8 @@ public class RGBtoHSV {
 		int width = mRGBtoHSV.getBitmapIn().getWidth();
 		int height = mRGBtoHSV.getBitmapIn().getHeight();
 		int[] pixels = new int[width * height];
-		mRGBtoHSV.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		mRGBtoHSV.getBitmapIn()
+				.getPixels(pixels, 0, width, 0, 0, width, height);
 		Vector<float[]> hsvValues = new Vector<float[]>();
 
 		for (int i = 0; i < pixels.length; i++) {

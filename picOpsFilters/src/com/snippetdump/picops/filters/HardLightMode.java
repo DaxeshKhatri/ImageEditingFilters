@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class HardLightMode.
  */
-public class HardLightMode extends Filter {
+public class HardLightMode implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -28,14 +28,15 @@ public class HardLightMode extends Filter {
 	 *            the m hard light mode
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(HardLightMode mHardLightMode) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		DoGreyscale mDoGreyscale = new DoGreyscale(mHardLightMode.getBitmapIn());
-		Bitmap bitmapOut = mDoGreyscale.executeFilter(mDoGreyscale);
+		DoGreyscale mDoGreyscale = new DoGreyscale(this.getBitmapIn());
+		Bitmap bitmapOut = mDoGreyscale.executeFilter();
 
-		int width = mHardLightMode.getBitmapIn().getWidth();
-		int height = mHardLightMode.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int[] pixels = new int[width * height];
 		bitmapOut.getPixels(pixels, 0, width, 0, 0, width, height);
 		bitmapOut.recycle();
@@ -54,10 +55,12 @@ public class HardLightMode extends Filter {
 			red = green = blue = (int) hardLightLayer(grey, grey);
 			pixels[i] = Color.argb(alpha, red, green, blue);
 		}
-		bitmapOut = Bitmap.createBitmap(width, height, mHardLightMode.getBitmapIn().getConfig());
+		bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
+				.getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

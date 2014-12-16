@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class DoColorFilter.
  */
-public class DoColorFilter extends Filter {
+public class DoColorFilter implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -40,28 +40,30 @@ public class DoColorFilter extends Filter {
 	 *            the m do color filter
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(DoColorFilter mDoColorFilter) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mDoColorFilter.getBitmapIn().getWidth();
-		int height = mDoColorFilter.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int alpha, red, green, blue;
 		int[] pixels = new int[width * height];
-		mDoColorFilter.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
 			alpha = Color.alpha(pixels[i]);
-			red = (int) (Color.red(pixels[i]) * mDoColorFilter.getRed());
-			green = (int) (Color.green(pixels[i]) * mDoColorFilter.getGreen());
-			blue = (int) (Color.blue(pixels[i]) * mDoColorFilter.getBlue());
+			red = (int) (Color.red(pixels[i]) * this.getRed());
+			green = (int) (Color.green(pixels[i]) * this.getGreen());
+			blue = (int) (Color.blue(pixels[i]) * this.getBlue());
 			pixels[i] = Color.argb(alpha, red, green, blue);
 		}
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mDoColorFilter.getBitmapIn()
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
 				.getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

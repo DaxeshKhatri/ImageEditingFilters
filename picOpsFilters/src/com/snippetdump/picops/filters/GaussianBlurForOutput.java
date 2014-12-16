@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 /**
  * The Class GaussianBlurForOutput.
  */
-public class GaussianBlurForOutput extends Filter {
+public class GaussianBlurForOutput implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -47,19 +47,21 @@ public class GaussianBlurForOutput extends Filter {
 	 * @param usedMaskSize
 	 *            the used mask size
 	 */
-	public GaussianBlurForOutput(Bitmap bitmapIn, int origWidth, int origHeight, int curWidth,
-			int curHeight, int usedMaskSize) {
+	public GaussianBlurForOutput(Bitmap bitmapIn, int origWidth,
+			int origHeight, int curWidth, int curHeight, int usedMaskSize) {
 		this.bitmapIn = bitmapIn;
 		this.origWidth = origWidth;
 		this.origHeight = origHeight;
 		this.curWidth = curWidth;
 		this.curHeight = curHeight;
 		this.usedMaskSize = usedMaskSize;
-		double[][] convolutionMask = PascalsTriangle.generateFaltungsmaske(usedMaskSize,
-				origWidth, origHeight, curWidth, curHeight);
+		double[][] convolutionMask = PascalsTriangle.generateConvolutionMask(
+				usedMaskSize, origWidth, origHeight, curWidth, curHeight);
 		this.convolutionMask = new ConvolutionMask(convolutionMask.length);
-		this.convolutionMask.applyFaltungskonfigurationBig(convolutionMask, convolutionMask.length);
-		this.convolutionMask.Factor = PascalsTriangle.koeffZurNorm(convolutionMask);
+		this.convolutionMask.applyFaltungskonfigurationBig(convolutionMask,
+				convolutionMask.length);
+		this.convolutionMask.Factor = PascalsTriangle
+				.koeffZurNorm(convolutionMask);
 		this.convolutionMask.Offset = 0;
 	}
 
@@ -70,10 +72,11 @@ public class GaussianBlurForOutput extends Filter {
 	 *            the m gaussian blur for output
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(GaussianBlurForOutput mGaussianBlurForOutput) {
+	@Override
+	public Bitmap executeFilter() {
 
-		return ConvolutionMask.berechneFaltungMxM(mGaussianBlurForOutput.getBitmapIn(),
-				mGaussianBlurForOutput.getConvolutionMask());
+		return ConvolutionMask.calculateConvolutionMxM(this.getBitmapIn(),
+				this.getConvolutionMask());
 	}
 
 	/**

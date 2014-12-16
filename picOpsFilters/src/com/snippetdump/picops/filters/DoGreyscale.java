@@ -6,8 +6,8 @@ import android.graphics.Color;
 /**
  * The Class DoGreyscale.
  */
-public class DoGreyscale extends Filter {
-	
+public class DoGreyscale implements Filter {
+
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
 
@@ -28,7 +28,8 @@ public class DoGreyscale extends Filter {
 	 *            the m do greyscale
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(DoGreyscale mDoGreyscale) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
 		// Define constant values
@@ -38,12 +39,11 @@ public class DoGreyscale extends Filter {
 
 		// Get the dimensions
 		int alpha, red, green, blue;
-		int width = mDoGreyscale.getBitmapIn().getWidth();
-		int height = mDoGreyscale.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int[] pixels = new int[width * height];
 		// Store every pixel into an integer array
-		mDoGreyscale.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width,
-				height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
@@ -58,11 +58,12 @@ public class DoGreyscale extends Filter {
 			pixels[i] = Color.argb(alpha, red, green, blue);
 		}
 		// Write in output Bitmap
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mDoGreyscale
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this
 				.getBitmapIn().getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

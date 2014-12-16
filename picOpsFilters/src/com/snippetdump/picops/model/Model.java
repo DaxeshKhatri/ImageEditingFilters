@@ -1,5 +1,5 @@
 package com.snippetdump.picops.model;
 
-public class Model {
+public interface Model {
 
 }

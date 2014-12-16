@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class Convolution Mask.
  */
-public class ConvolutionMask extends Model {
+public class ConvolutionMask implements Model {
 
 	/** The Constant SIZE. */
 	public static final int SIZE = 3;
@@ -100,10 +100,12 @@ public class ConvolutionMask extends Model {
 	 *            Faltungsmaske
 	 * @return Ausgabebitmap
 	 */
-	public static Bitmap berechneFaltung3x3(Bitmap bitmapIn, ConvolutionMask faltungsmaske) {
+	public static Bitmap calculateConvolution3x3(Bitmap bitmapIn,
+			ConvolutionMask faltungsmaske) {
 		int width = bitmapIn.getWidth();
 		int height = bitmapIn.getHeight();
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height,
+				bitmapIn.getConfig());
 
 		int A, R, G, B;
 		int sumR, sumG, sumB;
@@ -165,10 +167,12 @@ public class ConvolutionMask extends Model {
 	 *            Faltungsmaske
 	 * @return Ausgabebitmap
 	 */
-	public static Bitmap berechneFaltung5x5(Bitmap bitmapIn, ConvolutionMask faltungsmaske) {
+	public static Bitmap calculateConvolution5x5(Bitmap bitmapIn,
+			ConvolutionMask faltungsmaske) {
 		int width = bitmapIn.getWidth();
 		int height = bitmapIn.getHeight();
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height,
+				bitmapIn.getConfig());
 
 		int A, R, G, B;
 		int sumR, sumG, sumB;
@@ -231,10 +235,12 @@ public class ConvolutionMask extends Model {
 	 *            Faltungsmaske
 	 * @return Ausgabebitmap
 	 */
-	public static Bitmap berechneFaltungMxM(Bitmap bitmapIn, ConvolutionMask faltungsmaske) {
+	public static Bitmap calculateConvolutionMxM(Bitmap bitmapIn,
+			ConvolutionMask faltungsmaske) {
 		int width = bitmapIn.getWidth();
 		int height = bitmapIn.getHeight();
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height,
+				bitmapIn.getConfig());
 
 		int sizeOfMask = faltungsmaske.Maske.length;
 
@@ -252,7 +258,8 @@ public class ConvolutionMask extends Model {
 					}
 				}
 				// Alpha des mittleren Pixels abrufen
-				A = Color.alpha(pixels[(int) Math.sqrt(sizeOfMask)][(int) Math.sqrt(sizeOfMask)]);
+				A = Color.alpha(pixels[(int) Math.sqrt(sizeOfMask)][(int) Math
+						.sqrt(sizeOfMask)]);
 				sumR = sumG = sumB = 0;
 				// Jeweiligen Farbwerte abrufen (R,G,B)
 				for (int i = 0; i < sizeOfMask; ++i) {

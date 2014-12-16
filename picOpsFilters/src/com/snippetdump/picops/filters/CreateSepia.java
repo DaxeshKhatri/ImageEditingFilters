@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class CreateSepia.
  */
-public class CreateSepia extends Filter {
+public class CreateSepia implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -37,15 +37,16 @@ public class CreateSepia extends Filter {
 	 *            the m create sepia
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(CreateSepia mCreateSepia) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mCreateSepia.getBitmapIn().getWidth();
-		int height = mCreateSepia.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int red, green, blue, grey;
 		red = green = blue = grey = 0;
 		int[] pixels = new int[width * height];
-		mCreateSepia.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 
 		for (int i = 0; i < pixels.length; i++) {
 
@@ -74,11 +75,12 @@ public class CreateSepia extends Filter {
 
 			pixels[i] = Color.argb(Color.alpha(pixels[i]), red, green, blue);
 		}
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mCreateSepia.getBitmapIn()
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
 				.getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		pixels = null;
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

@@ -8,7 +8,7 @@ import android.graphics.Color;
 /**
  * The Class HSVtoRGB.
  */
-public class HSVtoRGB extends Filter {
+public class HSVtoRGB implements Filter {
 
 	/** The vector in. */
 	private Vector<float[]> vectorIn;
@@ -42,17 +42,18 @@ public class HSVtoRGB extends Filter {
 	 *            the m hs vto rgb
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(HSVtoRGB mHSVtoRGB) {
+	@Override
+	public Bitmap executeFilter() {
 
-		Bitmap bitmapOut = Bitmap.createBitmap(mHSVtoRGB.getWidth(), mHSVtoRGB.getHeight(),
-				Bitmap.Config.ARGB_8888);
-		int[] pixels = new int[mHSVtoRGB.getVectorIn().size()];
+		Bitmap bitmapOut = Bitmap.createBitmap(this.getWidth(),
+				this.getHeight(), Bitmap.Config.ARGB_8888);
+		int[] pixels = new int[this.getVectorIn().size()];
 
-		for (int i = 0; i < mHSVtoRGB.getVectorIn().size(); i++) {
-			pixels[i] = Color.HSVToColor(0xFF, mHSVtoRGB.getVectorIn().get(i));
+		for (int i = 0; i < this.getVectorIn().size(); i++) {
+			pixels[i] = Color.HSVToColor(0xFF, this.getVectorIn().get(i));
 		}
-		bitmapOut.setPixels(pixels, 0, mHSVtoRGB.getWidth(), 0, 0, mHSVtoRGB.getWidth(),
-				mHSVtoRGB.getHeight());
+		bitmapOut.setPixels(pixels, 0, this.getWidth(), 0, 0, this.getWidth(),
+				this.getHeight());
 
 		return bitmapOut;
 	}

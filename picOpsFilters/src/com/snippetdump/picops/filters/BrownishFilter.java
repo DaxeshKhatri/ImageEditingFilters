@@ -6,8 +6,8 @@ import android.graphics.Color;
 /**
  * The Class BrownishFilter.
  */
-public class BrownishFilter extends Filter {
-	
+public class BrownishFilter implements Filter {
+
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
 
@@ -28,15 +28,15 @@ public class BrownishFilter extends Filter {
 	 *            the m brownish filter
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(BrownishFilter mBrownishFilter) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mBrownishFilter.getBitmapIn().getWidth();
-		int height = mBrownishFilter.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int alpha, red, green, blue, pixel;
 		int[] pixels = new int[width * height];
-		mBrownishFilter.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width,
-				height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 		float[] hsv = new float[3];
 		float hue, saturation, value;
 		hue = saturation = value = 0;
@@ -54,7 +54,6 @@ public class BrownishFilter extends Filter {
 			blue = Color.blue(pixel);
 			blue *= 0.5;
 
-			
 			Color.RGBToHSV(red, green, blue, hsv);
 			hue = hsv[0];
 			saturation = hsv[1];
@@ -72,9 +71,10 @@ public class BrownishFilter extends Filter {
 			pixels[i] = pixel;
 		}
 		Bitmap bitmapOut = Bitmap.createBitmap(width, height,
-				mBrownishFilter.bitmapIn.getConfig());
+				this.bitmapIn.getConfig());
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

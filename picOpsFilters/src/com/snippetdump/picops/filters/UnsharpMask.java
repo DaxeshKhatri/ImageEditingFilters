@@ -6,7 +6,7 @@ import android.graphics.Color;
 /**
  * The Class UnsharpMask.
  */
-public class UnsharpMask extends Filter {
+public class UnsharpMask implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
@@ -37,15 +37,16 @@ public class UnsharpMask extends Filter {
 	 *            the m unsharp mask
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(UnsharpMask mUnsharpMask) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
-		int width = mUnsharpMask.getBitmapIn().getWidth();
-		int height = mUnsharpMask.getBitmapIn().getHeight();
-		Bitmap bitmapOut = Bitmap.createBitmap(width, height, mUnsharpMask.getBitmapIn()
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
+		Bitmap bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
 				.getConfig());
 		int[] pixels = new int[width * height];
-		mUnsharpMask.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
+		this.getBitmapIn().getPixels(pixels, 0, width, 0, 0, width, height);
 		bitmapOut.setPixels(pixels, 0, width, 0, 0, width, height);
 
 		int left = boxWidth / 2 + 1;
@@ -57,7 +58,7 @@ public class UnsharpMask extends Filter {
 		float unsharpMaskAmount = 0.5f;
 		int unsharpMaskThreshold = 3;
 
-		int[][] sourcePixels = loadPixelsFromImage(mUnsharpMask.getBitmapIn());
+		int[][] sourcePixels = loadPixelsFromImage(this.getBitmapIn());
 		int[][] blurredPixels = new int[width][height];
 
 		inlineApplyBlur(bitmapOut, sourcePixels, blurredPixels, left, top, right, bottom, boxWidth,
@@ -65,6 +66,7 @@ public class UnsharpMask extends Filter {
 		applyUnsharpMask(bitmapOut, sourcePixels, blurredPixels, left, top, right, bottom,
 				unsharpMaskAmount, unsharpMaskThreshold);
 		time = System.currentTimeMillis() - time;
+		System.out.println("Finished @ " + time + "ms");
 
 		return bitmapOut;
 	}

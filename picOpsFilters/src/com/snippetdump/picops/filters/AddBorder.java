@@ -7,13 +7,13 @@ import android.graphics.Paint;
 /**
  * The Class AddBorder.
  */
-public class AddBorder extends Filter {
+public class AddBorder implements Filter {
 
 	/** The bitmap in. */
 	private Bitmap bitmapIn;
 
 	/** The border size. */
-	private double borderSize;
+	private double borderSize; 
 
 	/**
 	 * Instantiates a new adds the border.
@@ -35,20 +35,22 @@ public class AddBorder extends Filter {
 	 *            the m add border
 	 * @return the bitmap
 	 */
-	public Bitmap executeFilter(AddBorder mAddBorder) {
+	@Override
+	public Bitmap executeFilter() {
 
 		long time = System.currentTimeMillis();
 		Bitmap bitmapOut = null;
-		int width = mAddBorder.getBitmapIn().getWidth();
-		int height = mAddBorder.getBitmapIn().getHeight();
+		int width = this.getBitmapIn().getWidth();
+		int height = this.getBitmapIn().getHeight();
 		int x, y, border;
 		x = y = 0;
-		border = (int) (((width * mAddBorder.getBorderSize()) + (height * mAddBorder
+		border = (int) (((width * this.getBorderSize()) + (height * this
 				.getBorderSize())) / 2);
-		bitmapOut = Bitmap.createBitmap(width, height, mAddBorder.getBitmapIn().getConfig());
+		bitmapOut = Bitmap.createBitmap(width, height, this.getBitmapIn()
+				.getConfig());
 		Canvas canvas = new Canvas();
 		canvas.setBitmap(bitmapOut);
-		canvas.drawBitmap(mAddBorder.getBitmapIn(), 0, 0, null);
+		canvas.drawBitmap(this.getBitmapIn(), 0, 0, null);
 
 		Paint paint = new Paint();
 		for (x = 0; x < width; x++) {
@@ -66,7 +68,8 @@ public class AddBorder extends Filter {
 			}
 		}
 		time = System.currentTimeMillis() - time;
-
+		System.out.println("Finished @ " + time + "ms");
+		
 		return bitmapOut;
 	}
 
